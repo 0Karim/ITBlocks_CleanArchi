@@ -19,7 +19,7 @@ namespace CleanArch.Application.Services
         }
 
 
-        public CoursesViewModel GetAll()
+        public CoursesViewModel GetCourses()
         {
             return new CoursesViewModel
             {
