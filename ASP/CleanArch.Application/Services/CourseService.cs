@@ -1,5 +1,7 @@
 ﻿using CleanArch.Application.Interfaces;
 using CleanArch.Application.ViewModels;
+using CleanArch.Domain.Commands;
+using CleanArch.Domain.Core.Bus;
 using CleanArch.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,13 +13,26 @@ namespace CleanArch.Application.Services
     {
 
         //here will call ICourse Repository and inject it to get all courses from our domain
-        ICourseRepository _courseRepository;
+        private readonly ICourseRepository _courseRepository;
 
-        public CourseService(ICourseRepository courseRepository)
+        //here will call bus 
+        private readonly IMediatorHandler _bus;
+
+        public CourseService(ICourseRepository courseRepository , IMediatorHandler bus)
         {
             _courseRepository = courseRepository;
+            _bus = bus;
         }
 
+        public void Create(CoursesViewModel coursesViewModel)
+        {
+            var createCourseCommand = new CreateCourseCommand(
+                    coursesViewModel.Name , coursesViewModel.Description , coursesViewModel.imageUrl
+                );
+
+            _bus.SendCommand(createCourseCommand);
+
+        }
 
         public CoursesViewModel GetCourses()
         {
